@@ -1,0 +1,11 @@
+D:\Project\Work\XMDB\bin\Debug\XMDB.dll
+D:\Project\Work\XMDB\bin\Debug\XMDB.pdb
+D:\Project\Work\XMDB\obj\Debug\XMDB.csproj.CoreCompileInputs.cache
+D:\Project\Work\XMDB\obj\Debug\XMDB.dll
+D:\Project\Work\XMDB\obj\Debug\XMDB.pdb
+D:\Project\Work\XMDB\bin\Debug\Newtonsoft.Json.dll
+D:\Project\Work\XMDB\bin\Debug\Newtonsoft.Json.xml
+D:\Project\Work\XMDB\bin\Debug\nunit.framework.dll
+D:\Project\Work\XMDB\bin\Debug\nunit.framework.pdb
+D:\Project\Work\XMDB\bin\Debug\nunit.framework.xml
+D:\Project\Work\XMDB\obj\Debug\XMDB.csprojResolveAssemblyReference.cache
