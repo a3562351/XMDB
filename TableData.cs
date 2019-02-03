@@ -221,21 +221,30 @@ namespace XMDB
 
         private RowMap Filter(string condition, string handle, bool is_warn = false)
         {
-            JObject jObject = (JObject)JsonConvert.DeserializeObject(condition);
+            JObject cond = (JObject)JsonConvert.DeserializeObject(condition);
 
             RowMap search_row_map = new RowMap();
-            if (jObject.ContainsKey("UID"))
+            //有指定UID先筛选
+            if (cond.ContainsKey("UID"))
             {
-                string uid = jObject["UID"].ToString();
-                if (!this.row_map.ContainsKey(uid))
+                JObject target = (JObject)JsonConvert.DeserializeObject(cond["UID"].ToString());
+                if (target["op"].ToString().Equals("=="))
                 {
-                    if (is_warn)
+                    string uid = target["value"].ToString();
+                    if (!this.row_map.ContainsKey(uid))
                     {
-                        throw new Exception(string.Format("{0} Table:{1} Error | Not Exist Uid:{2}", handle, this.table_name, uid));
+                        if (is_warn)
+                        {
+                            throw new Exception(string.Format("{0} Table:{1} Error | Not Exist Uid:{2}", handle, this.table_name, uid));
+                        }
+                        return search_row_map;
                     }
-                    return search_row_map;
+                    search_row_map[uid] = this.row_map[uid];
                 }
-                search_row_map[uid] = this.row_map[uid];
+                else
+                {
+                    search_row_map = this.row_map;
+                }
             }
             else
             {
@@ -243,25 +252,25 @@ namespace XMDB
             }
 
             //筛选条件先与后或
-            search_row_map = this.FilterCondition(search_row_map, jObject, true);
-            if (jObject.ContainsKey("$or"))
-            {
-                search_row_map = this.FilterCondition(search_row_map, (JObject)jObject["$or"], false);
-            }
+            if(cond.Count > (cond.ContainsKey("$or") ? 1 : 0))
+                search_row_map = this.FilterCondition(search_row_map, cond, true);
+
+            if (cond.ContainsKey("$or") && ((JObject)cond["$or"]).Count > 0)
+                search_row_map = this.FilterCondition(search_row_map, (JObject)cond["$or"], false);
 
             return search_row_map;
         }
 
-        private RowMap FilterCondition(RowMap search_row_map, JObject jObject, bool and_cond)
+        private RowMap FilterCondition(RowMap search_row_map, JObject cond, bool and_cond)
         {
             bool need_check = false;
 
             //先用索引筛选一遍
             RowMap and_filter_map = search_row_map;
             RowMap or_filter_map = new RowMap();
-            foreach (KeyValuePair<string, JToken> pair in jObject)
+            foreach (KeyValuePair<string, JToken> pair in cond)
             {
-                if (!pair.Key.Equals("UID") && !pair.Key.Equals("$or"))
+                if (!pair.Key.Equals("$or"))
                 {
                     string value = pair.Value.ToString();
                     if (this.index_map.ContainsKey(pair.Key))
@@ -311,7 +320,7 @@ namespace XMDB
                 foreach (KeyValuePair<string, RowData> pair in search_row_map)
                 {
                     string uid = pair.Key;
-                    if (this.CheckCondition(pair.Value, jObject, and_cond))
+                    if (this.CheckCondition(uid, pair.Value, cond, and_cond))
                     {
                         filter_row_map[uid] = this.row_map[uid];
                     }
@@ -321,13 +330,17 @@ namespace XMDB
             return search_row_map;
         }
 
-        private bool CheckCondition(RowData row_data, JObject jObject, bool and_cond)
+        private bool CheckCondition(string uid, RowData row_data, JObject cond, bool and_cond)
         {
-            foreach (KeyValuePair<string, JToken> pair in jObject)
+            foreach (KeyValuePair<string, JToken> pair in cond)
             {
                 if (!pair.Key.Equals("$or"))
                 {
-                    if (row_data.ContainsKey(pair.Key) && row_data[pair.Key].Equals(pair.Value.ToString()))
+                    JObject target = (JObject)JsonConvert.DeserializeObject(pair.Value.ToString());
+                    string target_value = target["value"].ToString();
+                    string op = target["op"].ToString();
+                    bool check = pair.Key.Equals("UID") ? this.CheckMatch(uid, target["value"].ToString(), target["op"].ToString()) : (row_data.ContainsKey(pair.Key) && this.CheckMatch(row_data[pair.Key], target_value, op));
+                    if (check)
                     {
                         if (!and_cond)
                         {
@@ -344,6 +357,13 @@ namespace XMDB
                 }
             }
             return and_cond ? true : false;
+        }
+
+        private bool CheckMatch(string value, string target_value, string op)
+        {
+            string param = string.Format("object value, object target_value");
+            string code = string.Format("({0})value {1} ({2})target_value", Utils.GetTypeStr(value), op, Utils.GetTypeStr(target_value));
+            return Utils.CodeRun<bool>(param, code, new object[] { value, target_value });
         }
     }
 }

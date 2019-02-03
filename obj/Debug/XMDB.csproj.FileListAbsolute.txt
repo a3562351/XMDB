@@ -9,3 +9,15 @@ D:\Project\Work\XMDB\bin\Debug\nunit.framework.dll
 D:\Project\Work\XMDB\bin\Debug\nunit.framework.pdb
 D:\Project\Work\XMDB\bin\Debug\nunit.framework.xml
 D:\Project\Work\XMDB\obj\Debug\XMDB.csprojResolveAssemblyReference.cache
+D:\Work\XMDB\obj\Debug\XMDB.csproj.CoreCompileInputs.cache
+D:\Work\XMDB\obj\Debug\XMDB.dll
+D:\Work\XMDB\obj\Debug\XMDB.pdb
+D:\Work\XMDB\bin\Debug\XMDB.dll
+D:\Work\XMDB\bin\Debug\XMDB.pdb
+D:\Work\XMDB\bin\Debug\Newtonsoft.Json.dll
+D:\Work\XMDB\bin\Debug\nunit.framework.dll
+D:\Work\XMDB\bin\Debug\Newtonsoft.Json.xml
+D:\Work\XMDB\bin\Debug\nunit.framework.pdb
+D:\Work\XMDB\bin\Debug\nunit.framework.xml
+D:\Work\XMDB\obj\Debug\XMDB.csproj.CopyComplete
+D:\Work\XMDB\obj\Debug\XMDB.csprojAssemblyReference.cache

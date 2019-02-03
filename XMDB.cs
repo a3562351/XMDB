@@ -77,6 +77,14 @@ namespace XMDB
             return Directory.Exists(path) && File.Exists(file_path);
         }
 
+        public static string CreateOperation(string value, string op = "==")
+        {
+            JObject jObject = new JObject();
+            jObject["value"] = value;
+            jObject["op"] = op;
+            return jObject.ToString();
+        }
+
         public static string CreateCondition(Dictionary<string, string> and_cond, Dictionary<string, string> or_cond = null)
         {
             JObject jObject = new JObject();

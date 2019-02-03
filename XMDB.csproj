@@ -54,7 +54,7 @@
   <ItemGroup>
     <Compile Include="Condition.cs" />
     <Compile Include="DBData.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMDB.cs" />
     <Compile Include="TableData.cs" />

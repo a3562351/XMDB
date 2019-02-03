@@ -168,7 +168,7 @@ namespace XMDB
                 {
                     throw new Exception(string.Format("TableSelect DB:{0} Error | Not Exist Table:{1}", this.db_name, table_name));
                 }
-                Log.LogData(this.table_map[table_name].GetData(), "PrintTable");
+                Utils.LogData(this.table_map[table_name].GetData(), "PrintTable");
             }
             catch (Exception e)
             {
